@@ -1,1 +1,7 @@
-fastapi[all]
+fastapi==0.95.1
+uvicorn[standard]==0.22.0
+sqlalchemy==1.4.39
+pydantic==2.1.0
+httpx==0.24.0
+numpy==1.25.2        # Version may vary
+pandas==2.0.3        # Version may vary
