@@ -19,15 +19,16 @@ import numpy as np
 
 app = FastAPI()
 
-@app.post("/calculate_routes/")
+# @app.post("/calculate_routes/")
+@app.get("/calculate_routes/")
 async def calculate_routes(demand_file: str, pairwise_file: str, capacity: int = 23):
     try:
         # Read node data in coordinate (x, y) format
-        nodes = pd.read_csv(demand_file, index_col='node')
+        nodes = pd.read_csv("demand.csv", index_col='node')
         nodes.rename(columns={"distance to depot": 'd0'}, inplace=True)
 
         # Read pairwise distance
-        pw = pd.read_csv(pairwise_file, index_col='Unnamed: 0')
+        pw = pd.read_csv("pairwise.csv", index_col='Unnamed: 0')
         pw.index.rename('', inplace=True)
 
         # Calculate savings for each link
