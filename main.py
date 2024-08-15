@@ -152,7 +152,7 @@ async def calculate_routes(req: Request):
 
     #Base case
     if(noOfNodes == 2):
-        return {"routes": [[0, 1, 0]]}
+        return {"routes": [[0, 1, 0]], "coordinates":coordinates}
     
 
     data["node_file"]["node"] = list(range(noOfNodes))
