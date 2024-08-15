@@ -45,7 +45,7 @@ async def calculate_distance_matrix(input_data):
         # Get coordinates for all nodes
         tasks = [get_coordinates(session, str(zip_code)) for zip_code in original_nodes]
         coordinates = await asyncio.gather(*tasks)
-        # print(coordinates)
+        print(coordinates)
         # Calculate distances between all nodes
         distances = []
         for i, start in enumerate(coordinates):
@@ -64,10 +64,12 @@ async def calculate_distance_matrix(input_data):
                     row.append(distance if distance is not None else float('inf'))
             distances.append(row)
 
-    # Create a DataFrame with indices and columns starting from 0
-    pw = pd.DataFrame(distances, index=nodes, columns=nodes)
-    # print(pw)
-    return pw
+        # Create a DataFrame with indices and columns starting from 0
+        coordinates_2d = [list(coord) for coord in coordinates]
+        print(coordinates_2d)
+        pw = pd.DataFrame(distances, index=nodes, columns=nodes)
+        # print(pw)
+        return [pw,coordinates_2d]
 
 # Function to calculate savings
 def calculate_savings(nodes, pw):
@@ -145,7 +147,7 @@ async def calculate_routes(req: Request):
     nodes = data['node_file']
     
     # Calculate the distance matrix asynchronously
-    pw = await calculate_distance_matrix(data)
+    [pw ,coordinates]= await calculate_distance_matrix(data)
     noOfNodes = len(data["node_file"]["node"])
 
     #Base case
@@ -254,4 +256,4 @@ async def calculate_routes(req: Request):
         route.insert(0,0)
         route.append(0)
 
-    return {"routes": routes}
+    return {"routes": routes, "coordinates":coordinates}
