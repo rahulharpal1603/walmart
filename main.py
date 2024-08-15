@@ -6,8 +6,21 @@ import geopy.distance
 from pyzipcode import ZipCodeDatabase
 import osmnx as ox
 import networkx as nx
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+
+app = FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 async def get_coordinates(session, zip_code):
     zcdb = ZipCodeDatabase()
@@ -27,7 +40,7 @@ async def calculate_distance_matrix(input_data):
 
     async with aiohttp.ClientSession() as session:
         depotCoordinates = await get_coordinates(session, str(original_nodes[0]))
-        graph = ox.graph_from_point(depotCoordinates, dist=10000, network_type='drive')
+        graph = ox.graph_from_point(depotCoordinates, dist=8000, network_type='drive')
 
         # Get coordinates for all nodes
         tasks = [get_coordinates(session, str(zip_code)) for zip_code in original_nodes]
@@ -42,9 +55,9 @@ async def calculate_distance_matrix(input_data):
                     row.append(0)
                 else:
                     distance = await get_distance(session, start, end)
-                    if distance<10:
-                        print(start)
-                        print(end)
+                    if distance<8:
+                        # print(start)
+                        # print(end)
                         node_1 = ox.distance.nearest_nodes(graph, start[1], start[0])
                         node_2 = ox.distance.nearest_nodes(graph, end[1], end[0])
                         distance = nx.shortest_path_length(graph, node_1, node_2, weight='length')/1000
