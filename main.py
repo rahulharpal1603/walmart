@@ -6,8 +6,21 @@ import geopy.distance
 from pyzipcode import ZipCodeDatabase
 import osmnx as ox
 import networkx as nx
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+
+app = FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=False,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 async def get_coordinates(session, zip_code):
     zcdb = ZipCodeDatabase()
@@ -27,12 +40,12 @@ async def calculate_distance_matrix(input_data):
 
     async with aiohttp.ClientSession() as session:
         depotCoordinates = await get_coordinates(session, str(original_nodes[0]))
-        graph = ox.graph_from_point(depotCoordinates, dist=10000, network_type='drive')
+        # graph = ox.graph_from_point(depotCoordinates, dist=8000, network_type='drive')
 
         # Get coordinates for all nodes
         tasks = [get_coordinates(session, str(zip_code)) for zip_code in original_nodes]
         coordinates = await asyncio.gather(*tasks)
-        # print(coordinates)
+        print(coordinates)
         # Calculate distances between all nodes
         distances = []
         for i, start in enumerate(coordinates):
@@ -42,19 +55,21 @@ async def calculate_distance_matrix(input_data):
                     row.append(0)
                 else:
                     distance = await get_distance(session, start, end)
-                    if distance<10:
-                        print(start)
-                        print(end)
-                        node_1 = ox.distance.nearest_nodes(graph, start[1], start[0])
-                        node_2 = ox.distance.nearest_nodes(graph, end[1], end[0])
-                        distance = nx.shortest_path_length(graph, node_1, node_2, weight='length')/1000
+                    # if distance<8:
+                        # print(start)
+                        # print(end)
+                        # node_1 = ox.distance.nearest_nodes(graph, start[1], start[0])
+                        # node_2 = ox.distance.nearest_nodes(graph, end[1], end[0])
+                        # distance = nx.shortest_path_length(graph, node_1, node_2, weight='length')/1000
                     row.append(distance if distance is not None else float('inf'))
             distances.append(row)
 
-    # Create a DataFrame with indices and columns starting from 0
-    pw = pd.DataFrame(distances, index=nodes, columns=nodes)
-    # print(pw)
-    return pw
+        # Create a DataFrame with indices and columns starting from 0
+        coordinates_2d = [list(coord) for coord in coordinates]
+        print(coordinates_2d)
+        pw = pd.DataFrame(distances, index=nodes, columns=nodes)
+        # print(pw)
+        return [pw,coordinates_2d]
 
 # Function to calculate savings
 def calculate_savings(nodes, pw):
@@ -132,12 +147,12 @@ async def calculate_routes(req: Request):
     nodes = data['node_file']
     
     # Calculate the distance matrix asynchronously
-    pw = await calculate_distance_matrix(data)
+    [pw ,coordinates]= await calculate_distance_matrix(data)
     noOfNodes = len(data["node_file"]["node"])
 
     #Base case
     if(noOfNodes == 2):
-        return {"routes": [[0, 1, 0]]}
+        return {"routes": [[0, 1, 0]], "coordinates":coordinates}
     
 
     data["node_file"]["node"] = list(range(noOfNodes))
@@ -241,4 +256,4 @@ async def calculate_routes(req: Request):
         route.insert(0,0)
         route.append(0)
 
-    return {"routes": routes}
+    return {"routes": routes, "coordinates":coordinates}

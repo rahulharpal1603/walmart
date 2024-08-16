@@ -11,4 +11,4 @@ pyzipcode[all]
 geopy[all]
 osmnx[all]
 networkx[all]
-
+scikit-learn[all]
