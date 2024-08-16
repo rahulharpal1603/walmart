@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios"
+// import { resultState,zipcodeState } from "../recoil/atoms.js";
+// import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setZipcodes, setResult } from '../redux/slice.js';
 
 const UserForm = () => {
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
   const [sourceZipcode, setSourceZipcode] = useState();
   const [destinations, setDestinations] = useState([
     { destZipcode: "", demand: "" },
   ]);
+  const [capacity,setCapacity]=useState();
 
   const handleSourceZipcodeChange = (e) => {
     setSourceZipcode(e.target.value);
   };
+
+  const handleCapacityChange = (e) => {
+    setCapacity(e.target.value)
+  }
 
   const handleDestinationChange = (e, index) => {
     const { name, value } = e.target;
@@ -28,6 +40,8 @@ const UserForm = () => {
     setDestinations(newDestinations);
   };
 
+  
+
   const handleSubmit = async(event) => {
     event.preventDefault();
     const node=[];
@@ -38,14 +52,23 @@ const UserForm = () => {
         node.push(parseInt(dest.destZipcode))
         demand.push(parseInt(dest.demand))
     })
+    dispatch(setZipcodes(node));
+
     const obj={
         "node_file":{
             "node":node,
             "demand":demand
-        }
+        },
+        "cap":parseInt(capacity)
     }
-    const res=await axios.post("https://wallmart.onrender.com/calculate-routes",obj)
-    console.log(res)
+    const res=await axios.post("https://wallmart.onrender.com/calculate-routes",obj,{
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      withCredentials:false
+    })
+    dispatch(setResult(res.data));
+    navigate('/result')
   };
 
   return (
@@ -53,7 +76,16 @@ const UserForm = () => {
     <div className="container m-4 ">
       <form className="min-h-screen flex flex-col items-center" onSubmit={handleSubmit}>
         <div>
-          
+        <input
+            className="m-2 h-10 w-72 p-2 rounded-lg border-gray-900 border-2"
+            type="text"
+            id="sourceZipcode"
+            value={capacity}
+            onChange={handleCapacityChange}
+            placeholder="Capacity"
+            required
+          />
+          <br />
           <input
             className="m-2 h-10 w-72 p-2 rounded-lg border-gray-900 border-2"
             type="text"
@@ -61,11 +93,12 @@ const UserForm = () => {
             value={sourceZipcode}
             onChange={handleSourceZipcodeChange}
             placeholder="Source Zipcode"
+            required
           />
         </div>
 
         {destinations.map((dest, index) => (
-          <div key={index}>
+          <div key={index} className="flex flex-col md:flex-row">
             <input
                 className="m-2 h-10 w-72 p-2 rounded-lg border-gray-900 border-2"
               type="text"
@@ -73,6 +106,7 @@ const UserForm = () => {
               value={dest.destZipcode}
               onChange={(e) => handleDestinationChange(e, index)}
               placeholder="Destination Zipcode"
+              required
             />
             <input
                 className="m-2 h-10 w-72 p-2 rounded-lg border-gray-900 border-2"
@@ -81,6 +115,7 @@ const UserForm = () => {
               value={dest.demand}
               onChange={(e) => handleDestinationChange(e, index)}
               placeholder="Demand"
+              required
             />
             <button
               type="button"
@@ -92,10 +127,10 @@ const UserForm = () => {
           </div>
         ))}
 
-        <button type="button" onClick={handleAddDestination} className="text-xl text-white bg-slate-700 m-2 py-2 px-3 rounded-lg">
+        <button type="button" onClick={handleAddDestination} className="m-2 bg-gray-700 text-white border-none rounded-lg py-2 px-4 text-lg font-semibold cursor-pointer transition-transform transform hover:bg-gray-900 active:bg-gray-700">
           Add Destination
         </button>
-        <button type="submit" className="text-xl text-white bg-slate-700 m-2 py-2 px-3 rounded-lg">Submit</button>
+        <button type="submit" onClick={handleSubmit} disabled={destinations.length==0} className="m-2 bg-gray-700 text-white border-none rounded-lg py-2 px-4 text-lg font-semibold cursor-pointer transition-transform transform hover:bg-gray-900 active:bg-gray-700">Submit</button>
       </form>
     </div>
     </div>
