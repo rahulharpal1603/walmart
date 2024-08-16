@@ -24,6 +24,7 @@ const LocationPin = () => (
 
 const Arrow = () => <HiOutlineArrowLongRight color="black" size={55} />;
 
+
 const Card = ({pincodes,i}) => {
 
     const zipcodes = useSelector((state) => state.zipcodes);
@@ -40,7 +41,7 @@ const Card = ({pincodes,i}) => {
         borderRadius: "10px",
         fontSize: "17px",
         width: "100%", // Set width to 80% of the container
-        margin: "24px auto", // Center the component horizontally
+        margin: "16px auto", // Center the component horizontally
         maxWidth: "1200px", // Optional: set a max-width to prevent it from becoming too wide on large screens
     }}
     >
