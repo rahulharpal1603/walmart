@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { useSelector } from "react-redux";
 import Card from "../components/Card";
+import { FaTruck } from "react-icons/fa";
 
 const ResultPage = () => {
     const result = useSelector((state) => state.result);
@@ -24,7 +25,13 @@ const ResultPage = () => {
         <div className="container my-4">
             {
                 result?.routes?.map((route,i)=>(
-                    <Card key={i} pincodes={route}></Card>
+                  <div className="flex flex-row items-center">
+                    <div className="flex flex-col items-center">
+                      <FaTruck size={22} className="text-gray-700"/>
+                      <span className="font-semibold text-gray-700"> {`Truck ${i+1}`}</span>
+                    </div>
+                    <Card key={i} idx={i} pincodes={route}></Card>
+                  </div>
                 ))
             }
         </div>
