@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className=''>
       <NavBar></NavBar>
-      <Form></Form>
+      <Form />
       <Footer></Footer>
     </div>
   )

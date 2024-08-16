@@ -24,7 +24,7 @@ const LocationPin = () => (
 
 const Arrow = () => <HiOutlineArrowLongRight color="black" size={55} />;
 
-const Card = ({pincodes}) => {
+const Card = ({pincodes,i}) => {
 
     const zipcodes = useSelector((state) => state.zipcodes);
 
@@ -44,6 +44,7 @@ const Card = ({pincodes}) => {
         maxWidth: "1200px", // Optional: set a max-width to prevent it from becoming too wide on large screens
     }}
     >
+      <h2 className=" md:text-lg font-bold">Truck {i+1}</h2>
       <div
         style={{
           display: "flex",
