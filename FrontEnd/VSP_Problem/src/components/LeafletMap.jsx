@@ -47,6 +47,14 @@ const LeafletMap = () => {
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });
+    const destinationIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
 
     // Add the warehouse marker
     L.marker(coordinates[0], { icon: warehouseIcon })
@@ -56,7 +64,7 @@ const LeafletMap = () => {
     // Add other markers with permanent tooltips
     coordinates.forEach((coord, index) => {
       if (index !== 0) {
-        L.marker(coord)
+        L.marker(coord,{icon:destinationIcon})
           .addTo(map)
           .bindTooltip('Location ' + (index + 1), { permanent: true, direction: 'right' });
       }
