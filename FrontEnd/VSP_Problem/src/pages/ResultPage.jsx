@@ -18,20 +18,15 @@ const ResultPage = () => {
   return (
     <div className="min-h-screen">
       <NavBar></NavBar>
-      <div className="min-h-screen flex flex-col justify-center items-center">
-        <div className="w-11/12 m-4">
+ <h1 className=" text-2xl font-bold my-5 px-2">Your optimized Routes</h1>
+      <div className=" flex flex-col justify-center items-center">
+        <div className="container h-full px-4">
             <LeafletMap></LeafletMap>
         </div>
-        <div className="w-11/12 my-4">
+        <div className="container my-4">
             {
                 result?.routes?.map((route,i)=>(
-                  <div className="flex flex-row items-center">
-                    <div className="flex flex-col items-center">
-                      <FaTruck size={22} className="text-gray-700"/>
-                      <span className="font-semibold text-gray-700"> {`Truck ${i+1}`}</span>
-                    </div>
-                    <Card key={i} idx={i} pincodes={route}></Card>
-                  </div>
+                    <Card key={i} i={i} pincodes={route}></Card>
                 ))
             }
         </div>

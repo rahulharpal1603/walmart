@@ -94,7 +94,7 @@ const LeafletMap = () => {
     };
   }, []);
 
-  return <div id="map" className='shadow-md rounded-lg' ref={mapRef} style={{ height: '600px' }} />;
+  return <div id="map" className='shadow-md rounded-lg pt-0' ref={mapRef} style={{ height: '400px' }} />;
 };
 
 export default LeafletMap;

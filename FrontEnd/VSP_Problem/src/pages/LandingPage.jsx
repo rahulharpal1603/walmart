@@ -14,14 +14,19 @@ const LandingPage = () => {
           <div className="flex flex-col justify-center items-start p-4">
             <h1 className="text-4xl font-bold mb-4">Welcome to Our Service</h1>
             <p className="text-lg mb-4 max-w-screen-sm">
-              Discover the best solutions for your needs. We provide top-notch
-              services to help you achieve your goals. Our team of experts is
-              dedicated to delivering high-quality results that exceed your
-              expectations. Whether you're looking for innovative solutions or
-              reliable support, we have you covered.
+              We specialize in optimizing delivery routes to help you achieve
+              greater efficiency and sustainability. Our cutting-edge solutions
+              are designed to <span className="text-semibold font-semibold"> minimize carbon footprint and reduce operational
+              costs, ensuring that your delivery processes are both eco-friendly
+              and cost-effective. </span>  We are committed to delivering
+              high-quality results that not only meet but exceed your
+              expectations. Whether you're aiming to enhance your logistics
+              operations or seeking reliable support, our innovative solutions
+              are here to help you make a positive impact on the environment
+              while improving your bottom line. 
             </p>
             <button
-              onClick={() => navigate("/form")}
+              onClick={() => navigate("/optimise")}
               className="px-6 py-2 my-3 bg-[#ffc220] font-medium text-lg text-gray-800 rounded-lg hover:bg-[#e6a800] transition duration-300"
             >
               Plan deliveries
