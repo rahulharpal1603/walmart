@@ -66,7 +66,7 @@ const LeafletMap = () => {
       if (index !== 0) {
         L.marker(coord,{icon:destinationIcon})
           .addTo(map)
-          .bindTooltip(`${zipcodes[index + 1]}`, { permanent: true, direction: 'right' });
+          .bindTooltip(`${zipcodes[index]}`, { permanent: true, direction: 'right' });
       }
     });
 
