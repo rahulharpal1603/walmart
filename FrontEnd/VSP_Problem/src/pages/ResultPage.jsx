@@ -19,10 +19,10 @@ const ResultPage = () => {
     <div className="min-h-screen">
       <NavBar></NavBar>
       <div className="min-h-screen flex flex-col justify-center items-center">
-        <div className="container m-2">
+        <div className="w-11/12 m-4">
             <LeafletMap></LeafletMap>
         </div>
-        <div className="container my-4">
+        <div className="w-11/12 my-4">
             {
                 result?.routes?.map((route,i)=>(
                   <div className="flex flex-row items-center">
