@@ -32,9 +32,9 @@ To use the delivery route optimization tool:
 1. Clone the repository:
    ```bash
    git clone https://github.com/username/route-optimization-tool.git](https://github.com/rahulharpal1603/walmart.git
-2. Install the required dependencies:
+2. Install the required dependencies (Run the command below inside the "walmart" folder):
     ```bash
-    cd FrontEnd/VSP_Problem
+    cd ./FrontEnd/VSP_Problem
     npm install
 2. Run the application:
     ```bash
